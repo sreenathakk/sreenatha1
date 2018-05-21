@@ -47,8 +47,11 @@ Param(
 
 
 Invoke-WebRequest -Uri $fileURI -OutFile "C:\PSModules.zip"
-Expand-Archive "C:\PSModules.zip" -DestinationPath "C:\"
-Import-Module "C:\PSModules\Microsoft.RDInfra.RDPowershell.dll"
+Start-Sleep -Seconds 30
+New-Item -Path "C:\PSModules" -ItemType directory -Force -ErrorAction SilentlyContinue
+Expand-Archive "C:\PSModules.zip" -DestinationPath "C:\PSModules" -ErrorAction SilentlyContinue
+Set-Location "C:\PSModules"
+Import-Module ".\PSModules\Microsoft.RDInfra.RDPowershell.dll"
 $SecurePass = $Password | ConvertTo-SecureString -asPlainText -Force
 $Credential = New-Object System.Management.Automation.PSCredential($Username,$SecurePass)
 Set-RdsContext -DeploymentUrl $RdbrokerURI -Credential $Credential
